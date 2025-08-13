@@ -696,7 +696,7 @@
 .blob-container {
   position: relative;
   width: 100%;
-  background-color: var(--smoky-black);
+  background-color: transparent;
   overflow: hidden;
 }
 .blob-container .container {
@@ -707,7 +707,7 @@
   position: absolute;
   width: 50px;
   height: 50px;
-  background: var(--floral-white);
+  background-color: var(--floral-white);
   border-radius: 50%;
   bottom: -25px;
   left: 50%;
@@ -719,7 +719,7 @@
 .blob-content {
   position: relative;
   z-index: 2;
-  color: var(--smoky-black);
+  background-color: transparent;
   font-size: 32px;
   text-align: left;
   align-items: center;
@@ -728,7 +728,7 @@
 .blob-content section {
   display: flex;
   gap: 24px;
-  color: var(--smoky-black);
+  background-color: transparent;
   font-family: 'Montserrat', sans-serif;
   font-size: 36px;
   font-style: italic;
@@ -872,7 +872,7 @@
 #particles-js {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 150%;
   background-color: var(--smoky-black); /* Arka plan rengi, istersen değiştirebilirsin */
   background-image: url(""); /* İsteğe bağlı arka plan resmi */
   background-repeat: no-repeat;
@@ -991,7 +991,6 @@
   .blob-content h4{
     font-size: 28px;
   }
-
 
   .turuncu-page .font-m36r, .turuncu-page .font-m36eb {
     font-size: 28px;

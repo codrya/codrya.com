@@ -292,13 +292,20 @@ body {
 }
 
 .black-main-page {
-
+  height: 100vh;
   padding: auto;
   display: flex;
   box-sizing: border-box;
   text-align: center;
   align-items: center;
+  flex-direction: column;
   
+}
+
+.black-main-page .dik {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .black-main-page .container{
