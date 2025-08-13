@@ -880,3 +880,55 @@
   background-position: 50% 50%;
   z-index: -1; /* Animasyonun içeriğin arkasında kalmasını sağlar */
 }
+
+
+#info-kaya {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--floral-white);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  z-index: -1;
+}
+
+#info-kaya .kaya1 {
+  position: absolute;
+  bottom: 5%;
+  right: 10%;
+  opacity: 0.15;
+  animation-name: donmeR; 
+  animation-duration: 20s;
+  animation-iteration-count: infinite; 
+  animation-timing-function: linear;
+}
+
+#info-kaya .kaya2 {
+  position: absolute;
+  top: 5%;
+  left: 10%;
+  opacity: 0.15;
+  animation-name: donmeL; 
+  animation-duration: 20s;
+  animation-iteration-count: infinite; 
+  animation-timing-function: linear;
+}
+
+@keyframes donmeR {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg); 
+  }
+}
+
+@keyframes donmeL {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg); 
+  }
+}
