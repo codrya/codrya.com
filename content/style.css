@@ -698,6 +698,8 @@
   width: 100%;
   background-color: transparent;
   overflow: hidden;
+  flex-direction: row;
+  display: flex;
 }
 .blob-container .container {
   padding-top: 3%;
