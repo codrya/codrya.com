@@ -50,6 +50,7 @@
     <link rel="icon" href="/assets/img/logo/b-wfs.svg" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/assets/img/logo/b-wfs.svg" />
     <script src="content/script.js" defer></script>
+    <script src="content/api.js" defer></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Ubuntu:wght@300;400;500&display=swap"
       rel="stylesheet"
@@ -93,7 +94,7 @@
             <li><a class="btn-s" href="/teklif-al.html">İletişim</a></li>
       </ul>
     </nav>
-    
+
 
     <div class="black-main-page">
       <div id="particles-js"></div>
@@ -276,26 +277,24 @@
             </p>
           </div>
 
-          <form class="footer-newsletter" action="#" method="post">
-            <label for="newsletter-email" class="font-u18r c-gray-25">
-              Bültenimize abone olun:
-            </label>
-            <br />
-            <br />
-            <div class="newsletter-input-group input-white">
-              <input
-                type="email"
-                id="newsletter-email"
-                name="email"
-                placeholder="Mail Adresi Giriniz..."
-                class=""
-                required
-              />
-              <button type="submit" class="btn-s" aria-label="Abone Ol">
-                <span class="circle-f"><span class="ok"></span></span>
-              </button>
-            </div>
-          </form>
+          <form id="newsletter-form" class="footer-newsletter" method="post">
+  <label for="newsletter-email" class="font-u18r c-gray-25">
+    Bültenimize abone olun:
+  </label>
+  <br /><br />
+  <div class="newsletter-input-group input-white">
+    <input
+      type="email"
+      id="newsletter-email"
+      name="email"
+      placeholder="Mail Adresi Giriniz..."
+      required
+    />
+    <button type="submit" class="btn-s" aria-label="Abone Ol">
+      <span class="circle-f"><span class="ok"></span></span>
+    </button>
+  </div>
+</form>
 
           <section class="footer-social">
             <h3 class="font-u18r c-soft-linen social-title">Bizi Takip Edin</h3>
