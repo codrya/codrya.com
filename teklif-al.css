@@ -153,15 +153,19 @@
 }
 
 .haraketli-icon {
-    padding-top: 20px;
+    padding: 20px 0;
     animation: moveUpDown 2s ease-in-out infinite;
 }
-
+.haraketli-icon svg{
+    width: 4a0px;
+    height: auto;
+   
+}
 @keyframes moveUpDown {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateY(-10px);
     }
     50% {
-        transform: translateY(-30px);
+        transform: translateY(15px);
     }
 }
