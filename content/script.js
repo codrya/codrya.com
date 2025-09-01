@@ -330,7 +330,7 @@ function handleScroll() {
   const scrollPos = window.scrollY
   const headHeight = 63
   const tPageTop = tPage.offsetTop
-  const tPageBottom = tPageTop + tPage.offsetHeight
+  const tPageBottom = tPageTop + tPage.offsetHeight - 45
 
   if (scrollPos + headHeight >= tPageTop && scrollPos < tPageBottom) {
     logoA.classList.add('cc-aktifc')

@@ -1,0 +1,167 @@
+/* ========================================= */
+/* YENİ TEKLİF FORMU STİLLERİ (REVİZE EDİLDİ) */
+/* ========================================= */
+
+/* ÜST TURUNCU ALAN (YÜKSEKLİK AZALTILDI) */
+.teklif-main{
+    align-items: center;
+    text-align: center;
+
+}
+.font-m20eb{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.teklif-main p{
+    padding-bottom: 16px;
+}
+/* ANA FORM ALANI */
+.form-section {
+    background-color: var(--floral-white);
+    padding: 10px 0;
+}
+
+.teklif-form-container {
+    max-width: 960px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+    display: grid;
+    grid-template-columns: 1fr; /* Mobil: Tek sütun */
+    gap: 25px;
+}
+
+.teklif-form-container h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    grid-column: 1 / -1; /* Her zaman tam genişlik */
+    margin-bottom: 15px;
+}
+
+/* HİZMET SEÇİM BUTONLARI */
+.hizmet-secim {
+    grid-column: 1 / -1; /* Her zaman tam genişlik */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.hizmet-secim .btn-secim {
+    font-family: 'ubuntu', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--smoky-black);
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.hizmet-secim .btn-secim:hover {
+    background-color: #f0f0f0;
+    border-color: var(--smoky-black);
+}
+
+.hizmet-secim .btn-secim.active {
+    background-color: var(--smoky-black);
+    color: var(--floral-white);
+    border-color: var(--smoky-black);
+}
+
+/* INPUT VE TEXTAREA ALANLARI */
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 12px 2px;
+    font-size: 16px;
+    font-family: 'ubuntu', sans-serif;
+    background-color: transparent;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-bottom-color: var(--flame);
+}
+
+.input-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* AÇIKLAMA ALANI İÇİN ÖZEL STİL */
+.full-width-input {
+    grid-column: 1 / -1; /* Her zaman tam genişlik */
+}
+
+/* GÖNDER BUTONU (ORTALANDI) */
+.submit-container {
+    grid-column: 1 / -1; /* Her zaman tam genişlik */
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/* ========================================= */
+/* RESPONSIVE AYARLAR                   */
+/* ========================================= */
+
+/* Tablet (768px ve üzeri) */
+@media (min-width: 768px) {
+    .teklif-hero h1 {
+        font-size: 32px;
+        max-width: 80%;
+    }
+
+    .teklif-form-container {
+        padding: 50px;
+        grid-template-columns: 1fr 1fr; /* İki sütunlu yapı */
+        gap: 35px 25px; /* Dikey - Yatay boşluk */
+    }
+
+    .hizmet-secim .btn-secim {
+        font-size: 15px;
+    }
+
+
+}
+
+@media (max-width: 1350px) {
+
+    .turuncu-page{
+        padding-top: 100px;
+    }
+}
+
+.haraketli-icon {
+    padding-top: 20px;
+    animation: moveUpDown 2s ease-in-out infinite;
+}
+
+@keyframes moveUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-30px);
+    }
+}

@@ -185,6 +185,10 @@
   .logoc {
     color: var(--flame);
   }
+
+  .menu-btn .bar {
+    background-color: var(--soft-linen);
+  }
 }
 
 
