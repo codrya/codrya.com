@@ -377,6 +377,7 @@ myInfoScrollBtn3.addEventListener('click', () => {
 })
 
 const wp = document.querySelector('.blob-content')
+const hwp = document.getElementById('hizmet-wp')
 const phoneNumbers = ['905456496776', '905393718304', '905537472675']
 
 wp.addEventListener('click', () => {
@@ -386,6 +387,17 @@ wp.addEventListener('click', () => {
 
   window.open(whatsappURL, '_blank')
 })
+
+hwp.addEventListener('click', () => {
+  const randomIndex = Math.floor(Math.random() * phoneNumbers.length)
+  const selectedNumber = phoneNumbers[randomIndex]
+  const whatsappURL = `https://wa.me/${selectedNumber}`
+
+  window.open(whatsappURL, '_blank')
+})
+
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
   const leftElements = document.querySelectorAll(

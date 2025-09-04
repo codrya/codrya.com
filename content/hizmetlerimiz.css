@@ -108,7 +108,7 @@
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 75px 40px;
   border-radius: 16px;
 
@@ -121,10 +121,12 @@
   background-color: var(--floral-white);
   padding: 40px;
   border-radius: 24px;
+  width: 450px;
 }
 .hizmet-kart-text{
   display: flex;
   flex-direction: column;
+  
   gap: 12px;
 }
 
@@ -143,11 +145,56 @@
 .hizmet-kart-btn{
   display: flex;
   flex-direction: row;
-  gap: 19px;
+  justify-content: space-around;
 }
 
 .hizmet-kart-btn .btn-v2{
   background-color: transparent;
   color: var(--smoky-black);
   border: 1px solid var(--smoky-black);
+}
+
+
+@media (max-width: 1445px) {
+  .hizmet-kart{
+    width: 350px;
+    gap: 36px;
+    padding: 30px;
+  }
+
+  .hizmet-kart-btn{
+  flex-direction: column;
+  gap: 12px;
+}
+
+}
+
+@media (max-width: 1100px) {
+    .hizmet-kart{
+    width: 100%;
+  }
+
+  .hizmetlerimiz-cards article{
+    align-items: center;
+  }
+
+  .hizmet-kart-btn{
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .hizmet-kart-img{
+    display: none;
+  }
+}
+
+@media (max-width: 675px) {
+    .hizmet-kart-btn{
+    flex-direction: column;
+  }
+
+  .hizmetlerimiz-cards article{
+    padding: 75px 20px;
+  }
+
 }
