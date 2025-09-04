@@ -1,0 +1,153 @@
+.white-main-page {
+  background-color: var(--floral-white);
+  padding: auto;
+  height: 80vh;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+
+
+.white-main-page .container{
+    padding-top: 220px;
+    padding-bottom: 9%;
+}
+
+.white-main-page .hizmetlerimiz-title {
+    z-index: 10;
+}
+
+.white-main-page h1 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.white-main-page p {
+    display: inline;
+  max-width: 600px;
+  line-height: 1.5;
+  margin: 20px 0;
+  padding: 0 10px;
+}
+
+#info-kaya {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+#info-kaya .kaya1 {
+  position: absolute;
+  top: 40%;
+  right: 15%;
+  width: 250px;
+  height: auto;
+  opacity: 0.15;
+  animation-name: donmeR;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+#info-kaya .kaya2 {
+  position: absolute;
+  bottom: 10%;
+  left: 15%;
+  width: 250px;
+  height: auto;
+  opacity: 0.15;
+  animation-name: donmeL;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes donmeR {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes donmeL {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* responsive düzenlemeler */
+@media (max-width: 992px) {
+  .white-main-page h1 {
+    font-size: 32px;
+  }
+
+  .white-main-page p {
+    font-size: 13px;
+  }
+}
+
+.white-page{
+  background-color: var(--floral-white);
+}
+
+
+.hizmetlerimiz-cards article{
+  background-color: var(--flame);
+  min-height: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 75px 40px;
+  border-radius: 16px;
+
+}
+
+.hizmet-kart{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--floral-white);
+  padding: 40px;
+  border-radius: 24px;
+}
+.hizmet-kart-text{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hizmet-kart-text h2, .hizmet-kart-text h6 ,.hizmet-kart-text p{
+  margin: 0;
+}
+
+.hizmet-kart-text div{
+  display: inline-block;
+  border: 1px solid var(--flame);
+  border-radius: 24px;
+  padding: 10px 20px;
+  width: fit-content;
+}
+
+.hizmet-kart-btn{
+  display: flex;
+  flex-direction: row;
+  gap: 19px;
+}
+
+.hizmet-kart-btn .btn-v2{
+  background-color: transparent;
+  color: var(--smoky-black);
+  border: 1px solid var(--smoky-black);
+}
