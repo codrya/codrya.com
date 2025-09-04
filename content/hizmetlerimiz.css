@@ -111,7 +111,8 @@
   justify-content: space-around;
   padding: 75px 40px;
   border-radius: 16px;
-
+  overflow: hidden; /* Animasyonların taşmasını engelle */
+  margin-bottom: 40px; /* Kartlar arasına boşluk ekle */
 }
 
 .hizmet-kart{
@@ -122,11 +123,57 @@
   padding: 40px;
   border-radius: 24px;
   width: 450px;
+  transform: translateX(-100px);
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
+
+.hizmet-kart-img {
+    transform: translateX(100px);
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.layout-reversed .hizmet-kart {
+    transform: translateX(100px);
+}
+
+.layout-reversed .hizmet-kart-img {
+    transform: translateX(-100px);
+}
+
+.hizmet-kart.is-visible, .hizmet-kart-img.is-visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+
+/* Kademeli animasyon için hazırlık */
+.hizmet-kart-text > *, .hizmet-kart-btn > * {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Kart görünür olduğunda animasyonu tetikle */
+.hizmet-kart.is-visible .hizmet-kart-text > *,
+.hizmet-kart.is-visible .hizmet-kart-btn > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Kademeli gecikmeler */
+.hizmet-kart.is-visible .hizmet-kart-text div { transition-delay: 0.2s; }
+.hizmet-kart.is-visible .hizmet-kart-text h2 { transition-delay: 0.4s; }
+.hizmet-kart.is-visible .hizmet-kart-text p { transition-delay: 0.6s; }
+.hizmet-kart.is-visible .hizmet-kart-btn { transition-delay: 0.8s; }
+
+
+
+
 .hizmet-kart-text{
   display: flex;
   flex-direction: column;
-  
   gap: 12px;
 }
 

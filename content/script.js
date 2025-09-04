@@ -1,324 +1,214 @@
-const menuBtn = document.querySelector('.menu-btn')
-const overlay = document.querySelector('.overlay')
+const menuBtn = document.querySelector('.menu-btn');
+const overlay = document.querySelector('.overlay');
 
 menuBtn.addEventListener('click', () => {
-  const isOpen = overlay.classList.toggle('active')
-  menuBtn.classList.toggle('active')
+  const isOpen = overlay.classList.toggle('active');
+  menuBtn.classList.toggle('active');
+  document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+  menuBtn.setAttribute('aria-expanded', isOpen);
+  overlay.setAttribute('aria-hidden', !isOpen);
+});
 
-  document.body.style.overflow = isOpen ? 'hidden' : 'auto'
-
-  menuBtn.setAttribute('aria-expanded', isOpen)
-  overlay.setAttribute('aria-hidden', !isOpen)
-})
-
-document.querySelectorAll('.nav-list a').forEach((link) => {
+document.querySelectorAll('.nav-list a').forEach(link => {
   link.addEventListener('click', () => {
-    overlay.classList.remove('active')
-    menuBtn.classList.remove('active')
-    document.body.style.overflow = 'auto'
-    menuBtn.setAttribute('aria-expanded', false)
-    overlay.setAttribute('aria-hidden', true)
-  })
-})
+    overlay.classList.remove('active');
+    menuBtn.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    menuBtn.setAttribute('aria-expanded', false);
+    overlay.setAttribute('aria-hidden', true);
+  });
+});
 
-const titles = [
-  'Değer Katan',
-  'Etki Odaklı',
-  'Vizyon Sahibi',
-  'Kurumsal Hafızalı',
-  'Değer Odaklı',
-  'Profesyonel',
-  'Analiz Tabanlı',
-  'Planlı ve Etkili',
-  'Uzun Vadeli',
-  'Ses Getiren',
-  'Stratejik',
-  'Güvenilir',
-  'Fark Yaratan',
-  'Yeni Nesil',
-  'Özgün',
-  'Marka Dostu',
-  'Hedefe Yönelik',
-  'Çözüm Sunan',
-  'Bütçe Dostu',
-  'Kreatif',
-  'İz Bırakan',
-  'İletişim Odaklı',
-  'Markanızı Büyüten',
-  'Yön Veren',
-  'Zaman Kazandıran',
-]
-let currentTitleIndex = 0
-const animatedTitleElement = document.getElementById('animatedTitle')
+// --- Animated Title --- //
+const animatedTitleElement = document.getElementById('animatedTitle');
+if (animatedTitleElement) {
+  const titles = [
+    'Değer Katan', 'Etki Odaklı', 'Vizyon Sahibi', 'Kurumsal Hafızalı',
+    'Değer Odaklı', 'Profesyonel', 'Analiz Tabanlı', 'Planlı ve Etkili',
+    'Uzun Vadeli', 'Ses Getiren', 'Stratejik', 'Güvenilir', 'Fark Yaratan',
+    'Yeni Nesil', 'Özgün', 'Marka Dostu', 'Hedefe Yönelik', 'Çözüm Sunan',
+    'Bütçe Dostu', 'Kreatif', 'İz Bırakan', 'İletişim Odaklı',
+    'Markanızı Büyüten', 'Yön Veren', 'Zaman Kazandıran',
+  ];
+  let currentTitleIndex = 0;
+  const typingSpeed = 70;
+  const deletingSpeed = 40;
+  const pauseBetweenTitles = 500;
 
-const typingSpeed = 70 // Her harfin yazılma hızı (milisaniye)
-const deletingSpeed = 40 // Her harfin silinme hızı (milisaniye)
-const pauseBetweenTitles = 500 // Başlıklar arası bekleme süresi (milisaniye)
-
-// Mevcut başlığı harf harf silme fonksiyonu (backspace efekti)
-function deleteTitle(callback) {
-  let currentText = animatedTitleElement.textContent
-  let i = currentText.length - 1
-
-  function removeChar() {
-    if (i >= 0) {
-      currentText = currentText.substring(0, i)
-      animatedTitleElement.textContent = currentText
-      i--
-      setTimeout(removeChar, deletingSpeed)
-    } else {
-      if (callback) callback() // Silme bittiğinde geri çağrıyı çalıştır
+  function deleteTitle(callback) {
+    let currentText = animatedTitleElement.textContent;
+    let i = currentText.length - 1;
+    function removeChar() {
+      if (i >= 0) {
+        animatedTitleElement.textContent = currentText.substring(0, i);
+        i--;
+        setTimeout(removeChar, deletingSpeed);
+      } else if (callback) {
+        callback();
+      }
     }
+    removeChar();
   }
-  removeChar()
-}
 
-// Yeni başlığı harf harf yazma fonksiyonu (typewriter efekti)
-function typeTitle(title, callback) {
-  let i = 0
-  let currentText = ''
-
-  function addChar() {
-    if (i < title.length) {
-      currentText += title.charAt(i)
-      animatedTitleElement.textContent = currentText
-      i++
-      setTimeout(addChar, typingSpeed)
-    } else {
-      if (callback) callback() // Yazma bittiğinde geri çağrıyı çalıştır
+  function typeTitle(title, callback) {
+    let i = 0;
+    function addChar() {
+      if (i < title.length) {
+        animatedTitleElement.textContent += title.charAt(i);
+        i++;
+        setTimeout(addChar, typingSpeed);
+      } else if (callback) {
+        callback();
+      }
     }
+    addChar();
   }
-  addChar()
-}
 
-// Başlıkları sırayla değiştiren ana fonksiyon
-function changeTitle() {
-  const currentTitleText = animatedTitleElement.textContent
-  const nextTitle = titles[currentTitleIndex]
-
-  if (currentTitleText.length > 0) {
-    // Eğer ekranda bir başlık varsa, önce onu sil
+  function changeTitle() {
     deleteTitle(() => {
-      setTimeout(() => {
-        // Silme bittikten sonra kısa bir süre bekle
-        typeTitle(nextTitle, () => {
-          // Yeni başlığı yaz
-          currentTitleIndex = (currentTitleIndex + 1) % titles.length
-          setTimeout(changeTitle, pauseBetweenTitles) // Başlık yazıldıktan sonra döngüyü başlat
-        })
-      }, pauseBetweenTitles) // Silme sonrası bekleme
-    })
-  } else {
-    // Eğer ekranda hiç başlık yoksa (ilk çalıştırma), doğrudan yaz
-    typeTitle(nextTitle, () => {
-      currentTitleIndex = (currentTitleIndex + 1) % titles.length
-      setTimeout(changeTitle, pauseBetweenTitles)
-    })
+      currentTitleIndex = (currentTitleIndex + 1) % titles.length;
+      setTimeout(() => typeTitle(titles[currentTitleIndex], () => setTimeout(changeTitle, pauseBetweenTitles)), pauseBetweenTitles);
+    });
   }
+
+  typeTitle(titles[currentTitleIndex], () => {
+    currentTitleIndex = (currentTitleIndex + 1) % titles.length;
+    setTimeout(changeTitle, pauseBetweenTitles);
+  });
 }
 
-// Sayfa yüklendiğinde başlat
-document.addEventListener('DOMContentLoaded', () => {
-  // İlk başlığı doğrudan yazarak başlat
-  typeTitle(titles[currentTitleIndex], () => {
-    currentTitleIndex = (currentTitleIndex + 1) % titles.length
-    setTimeout(changeTitle, pauseBetweenTitles) // İlk başlık yazıldıktan sonra döngüyü başlat
-  })
-})
-;('use strict')
-
+// --- Carousel 3D --- //
 class Carousel3D {
   constructor() {
-    this.cards = document.querySelectorAll('.card')
-    this.prevBtn = document.getElementById('prevBtn')
-    this.nextBtn = document.getElementById('nextBtn')
-    this.dotsContainer = document.getElementById('dotsContainer')
-    this.currentIndex = 0
-    this.totalCards = this.cards.length
-    this.isAnimating = false
-
-    this.positions = [
-      'center',
-      'right-1',
-      'right-2',
-      'right-3',
-      'hidden',
-      'left-1',
-      'left-2',
-      'left-3',
-    ]
-
-    this.init()
+    this.cards = document.querySelectorAll('.card');
+    if (this.cards.length === 0) return;
+    this.prevBtn = document.getElementById('prevBtn');
+    this.nextBtn = document.getElementById('nextBtn');
+    this.dotsContainer = document.getElementById('dotsContainer');
+    this.currentIndex = 0;
+    this.totalCards = this.cards.length;
+    this.isAnimating = false;
+    this.positions = ['center', 'right-1', 'right-2', 'right-3', 'hidden', 'left-1', 'left-2', 'left-3'];
+    this.init();
   }
 
   init() {
-    this.createDots()
-    this.bindEvents()
-    this.updateActiveStates()
+    this.createDots();
+    this.bindEvents();
+    this.updateActiveStates();
   }
 
   createDots() {
-    this.dotsContainer.innerHTML = ''
+    this.dotsContainer.innerHTML = '';
     for (let i = 0; i < this.totalCards; i++) {
-      const dot = document.createElement('div')
-      dot.classList.add('dot')
-      if (i === this.currentIndex) {
-        dot.classList.add('active')
-      }
-      dot.addEventListener('click', () => this.goToSlide(i))
-      this.dotsContainer.appendChild(dot)
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (i === this.currentIndex) dot.classList.add('active');
+      dot.addEventListener('click', () => this.goToSlide(i));
+      this.dotsContainer.appendChild(dot);
     }
   }
 
   bindEvents() {
-    this.prevBtn.addEventListener('click', () => this.prev())
-    this.nextBtn.addEventListener('click', () => this.next())
+    this.prevBtn.addEventListener('click', () => this.prev());
+    this.nextBtn.addEventListener('click', () => this.next());
+    document.getElementById('prevBtnMobile').addEventListener('click', () => this.prev());
+    document.getElementById('nextBtnMobile').addEventListener('click', () => this.next());
 
-    // Mobile button events
-    document
-      .getElementById('prevBtnMobile')
-      .addEventListener('click', () => this.prev())
-    document
-      .getElementById('nextBtnMobile')
-      .addEventListener('click', () => this.next())
+    let startX = 0;
+    const carousel = document.querySelector('.carousel-wrapper');
+    carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+    carousel.addEventListener('touchend', e => { this.handleSwipe(startX, e.changedTouches[0].clientX); });
 
-    // Touch events for mobile
-    let startX = 0
-    let endX = 0
-    const carousel = document.querySelector('.carousel-wrapper')
+    let mouseStartX = 0;
+    let isDragging = false;
+    carousel.addEventListener('mousedown', e => { mouseStartX = e.clientX; isDragging = true; });
+    carousel.addEventListener('mousemove', e => { if (isDragging) e.preventDefault(); });
+    carousel.addEventListener('mouseup', e => { if (isDragging) { this.handleSwipe(mouseStartX, e.clientX); isDragging = false; } });
 
-    carousel.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX
-    })
-
-    carousel.addEventListener('touchend', (e) => {
-      endX = e.changedTouches[0].clientX
-      this.handleSwipe(startX, endX)
-    })
-
-    // Mouse events for desktop
-    let mouseStartX = 0
-    let mouseEndX = 0
-    let isDragging = false
-
-    carousel.addEventListener('mousedown', (e) => {
-      mouseStartX = e.clientX
-      isDragging = true
-    })
-
-    carousel.addEventListener('mousemove', (e) => {
-      if (!isDragging) return
-      e.preventDefault()
-    })
-
-    carousel.addEventListener('mouseup', (e) => {
-      if (!isDragging) return
-      mouseEndX = e.clientX
-      this.handleSwipe(mouseStartX, mouseEndX)
-      isDragging = false
-    })
-
-    // Card click events
     this.cards.forEach((card, index) => {
-      card.addEventListener('click', (e) => {
+      card.addEventListener('click', e => {
         if (!card.classList.contains('center')) {
-          e.preventDefault()
-          this.goToSlide(index)
+          e.preventDefault();
+          this.goToSlide(index);
         }
-      })
-    })
+      });
+    });
   }
 
   handleSwipe(startX, endX) {
-    const threshold = 50
-    const diff = startX - endX
-
-    if (Math.abs(diff) > threshold) {
-      if (diff > 0) {
-        this.next()
-      } else {
-        this.prev()
-      }
+    if (Math.abs(startX - endX) > 50) {
+      if (startX - endX > 0) this.next(); else this.prev();
     }
   }
 
-  next() {
-    if (this.isAnimating) return
-    this.currentIndex = (this.currentIndex + 1) % this.totalCards
-    this.updateCarousel()
-  }
-
-  prev() {
-    if (this.isAnimating) return
-    this.currentIndex =
-      (this.currentIndex - 1 + this.totalCards) % this.totalCards
-    this.updateCarousel()
-  }
+  next() { this.goToSlide((this.currentIndex + 1) % this.totalCards); }
+  prev() { this.goToSlide((this.currentIndex - 1 + this.totalCards) % this.totalCards); }
 
   goToSlide(index) {
-    if (this.isAnimating || index === this.currentIndex) return
-    this.currentIndex = index
-    this.updateCarousel()
+    if (this.isAnimating || index === this.currentIndex) return;
+    this.currentIndex = index;
+    this.updateCarousel();
   }
 
   updateCarousel() {
-    this.isAnimating = true
-
+    this.isAnimating = true;
     this.cards.forEach((card, index) => {
-      // Remove all position classes
-      this.positions.forEach((pos) => card.classList.remove(pos))
-
-      // Calculate new position
-      let positionIndex =
-        (index - this.currentIndex + this.totalCards) % this.totalCards
-      let positionClass = this.positions[positionIndex]
-
-      // Add new position class
-      card.classList.add(positionClass)
-      card.dataset.index = index
-    })
-
-    this.updateActiveStates()
-
-    // Reset animation lock
-    setTimeout(() => {
-      this.isAnimating = false
-    }, 800)
+      this.positions.forEach(pos => card.classList.remove(pos));
+      let posIndex = (index - this.currentIndex + this.totalCards) % this.totalCards;
+      card.classList.add(this.positions[posIndex]);
+    });
+    this.updateActiveStates();
+    setTimeout(() => { this.isAnimating = false; }, 800);
   }
 
   updateActiveStates() {
-    // Update dots
     document.querySelectorAll('.dot').forEach((dot, index) => {
-      dot.classList.toggle('active', index === this.currentIndex)
-    })
+      dot.classList.toggle('active', index === this.currentIndex);
+    });
   }
 }
 
-// Initialize carousel when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  new Carousel3D()
-})
+// --- General Initializations on DOMContentLoaded --- //
+document.addEventListener('DOMContentLoaded', function () {
+  new Carousel3D();
 
-window.addEventListener('DOMContentLoaded', (event) => {
-  const wpLogo = document.getElementById('wp-logo')
-  const wpYazi = document.getElementById('wp-yazi')
-  const wpOk = document.getElementById('wp-ok')
+  // --- WhatsApp Button Animations --- //
+  const wpLogo = document.getElementById('wp-logo');
+  if (wpLogo) {
+    const wpYazi = document.getElementById('wp-yazi');
+    const wpOk = document.getElementById('wp-ok');
+    setTimeout(() => { wpYazi.classList.remove('gizli'); wpYazi.classList.add('aktif'); }, 2000);
+    setTimeout(() => { wpOk.classList.remove('gizli'); wpOk.classList.add('aktif'); }, 2200);
+    setTimeout(() => { wpLogo.classList.remove('gizli'); wpLogo.classList.add('aktif'); }, 2700);
+  }
 
-  setTimeout(() => {
-    wpYazi.classList.remove('gizli')
-    wpYazi.classList.add('aktif')
-  }, 2000)
+  // --- Logo Click --- //
+  const logo = document.getElementById('logo');
+  if (logo) {
+    logo.addEventListener('click', () => { window.location.href = '/'; });
+  }
 
-  setTimeout(() => {
-    wpOk.classList.remove('gizli')
-    wpOk.classList.add('aktif')
-  }, 2200)
-
-  setTimeout(() => {
-    wpLogo.classList.remove('gizli')
-    wpLogo.classList.add('aktif')
-  }, 2700)
-})
+  // --- Particles JS --- //
+  if (document.getElementById('particles-js')) {
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#ffffff" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5, "random": false },
+        "size": { "value": 5, "random": true },
+        "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+        "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+        "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+      }
+    });
+  }
+});
 
 const head = document.querySelector('.header')
 const tPage = document.querySelector('.turuncu-page')
@@ -353,155 +243,21 @@ function handleScroll() {
 
 window.addEventListener('scroll', handleScroll)
 
-const myInfoScrollBtn1 = document.getElementById('Hizmetler1')
-const myInfoScrollBtn2 = document.getElementById('Hizmetler2')
-const myInfoScrollBtn3 = document.getElementById('Hizmetler3')
-const myInfo = document.querySelector('.carousel-container')
 
-myInfoScrollBtn1.addEventListener('click', () => {
-  myInfo.scrollIntoView({
-    behavior: 'smooth',
-  })
-})
+// --- Scroll to Sections --- //
+const myInfo = document.querySelector('.carousel-container');
+if (myInfo) {
+  document.getElementById('Hizmetler1')?.addEventListener('click', () => myInfo.scrollIntoView({ behavior: 'smooth' }));
+  document.getElementById('Hizmetler2')?.addEventListener('click', () => myInfo.scrollIntoView({ behavior: 'smooth' }));
+  document.getElementById('Hizmetler3')?.addEventListener('click', () => myInfo.scrollIntoView({ behavior: 'smooth' }));
+}
 
-myInfoScrollBtn2.addEventListener('click', () => {
-  myInfo.scrollIntoView({
-    behavior: 'smooth',
-  })
-})
+// --- WhatsApp Click --- //
+const phoneNumbers = ['905456496776', '905393718304', '905537472675'];
+function openWhatsApp() {
+  const selectedNumber = phoneNumbers[Math.floor(Math.random() * phoneNumbers.length)];
+  window.open(`https://wa.me/${selectedNumber}`, '_blank');
+}
 
-myInfoScrollBtn3.addEventListener('click', () => {
-  myInfo.scrollIntoView({
-    behavior: 'smooth',
-  })
-})
-
-const wp = document.querySelector('.blob-content')
-const hwp = document.getElementById('hizmet-wp')
-const phoneNumbers = ['905456496776', '905393718304', '905537472675']
-
-wp.addEventListener('click', () => {
-  const randomIndex = Math.floor(Math.random() * phoneNumbers.length)
-  const selectedNumber = phoneNumbers[randomIndex]
-  const whatsappURL = `https://wa.me/${selectedNumber}`
-
-  window.open(whatsappURL, '_blank')
-})
-
-hwp.addEventListener('click', () => {
-  const randomIndex = Math.floor(Math.random() * phoneNumbers.length)
-  const selectedNumber = phoneNumbers[randomIndex]
-  const whatsappURL = `https://wa.me/${selectedNumber}`
-
-  window.open(whatsappURL, '_blank')
-})
-
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  const leftElements = document.querySelectorAll(
-    '.page-second-one p.animate-from-left'
-  )
-
-  const rightElements = document.querySelectorAll(
-    '.page-second-two .object.animate-from-right'
-  )
-
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1,
-  }
-
-  function handleIntersect(entries, observer) {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible')
-
-        observer.unobserve(entry.target)
-      }
-    })
-  }
-
-  const observer = new IntersectionObserver(handleIntersect, observerOptions)
-
-  leftElements.forEach((element) => {
-    observer.observe(element)
-  })
-
-  rightElements.forEach((element) => {
-    observer.observe(element)
-  })
-})
-
-document.getElementById('logo').addEventListener('click', function () {
-  window.location.href = '/'
-})
-
-particlesJS("particles-js", {
-  "particles": {
-    "number": {
-      "value": 80,
-      "density": {
-        "enable": true,
-        "value_area": 800
-      }
-    },
-    "color": {
-      "value": "#ffffff"
-    },
-    "shape": {
-      "type": "circle"
-    },
-    "opacity": {
-      "value": 0.5,
-      "random": false
-    },
-    "size": {
-      "value": 5,
-      "random": true
-    },
-    "line_linked": {
-      "enable": true,
-      "distance": 150,
-      "color": "#ffffff",
-      "opacity": 0.4,
-      "width": 1
-    },
-    "move": {
-      "enable": true,
-      "speed": 6,
-      "direction": "none",
-      "random": false,
-      "straight": false,
-      "out_mode": "out",
-      "bounce": false
-    }
-  },
-  "interactivity": {
-    "detect_on": "canvas",
-    "events": {
-      "onhover": {
-        "enable": true,
-        "mode": "grab" /* Fare üzerine gelindiğinde etkileşim başlar */
-      },
-      "onclick": {
-        "enable": true,
-        "mode": "push"
-      },
-      "resize": true
-    },
-    "modes": {
-      "grab": {
-        "distance": 200, /* Fare ile parçacıklar arasındaki etkileşim mesafesi */
-        "line_linked": {
-          "opacity": 1
-        }
-      },
-      "push": {
-        "particles_nb": 4
-      }
-    }
-  }
-});
+document.querySelector('.blob-content')?.addEventListener('click', openWhatsApp);
+document.querySelector('.btn-v2')?.addEventListener('click', openWhatsApp);
