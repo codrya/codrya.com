@@ -126,6 +126,7 @@
   transform: translateX(-100px);
   opacity: 0;
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  gap: 12px;
 }
 
 .hizmet-kart-img {
