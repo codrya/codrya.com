@@ -261,3 +261,42 @@ function openWhatsApp() {
 
 document.querySelector('.blob-content')?.addEventListener('click', openWhatsApp);
 document.querySelector('.btn-v2')?.addEventListener('click', openWhatsApp);
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const leftElements = document.querySelectorAll(
+    '.page-second-one p.animate-from-left'
+  )
+
+  const rightElements = document.querySelectorAll(
+    '.page-second-two .object.animate-from-right'
+  )
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1,
+  }
+
+  function handleIntersect(entries, observer) {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible')       
+       entry.target.classList.add('is-visible')
+
+        observer.unobserve(entry.target)
+      }
+    })
+  }
+
+  const observer = new IntersectionObserver(handleIntersect, observerOptions)
+
+  leftElements.forEach((element) => {
+    observer.observe(element)
+  })
+
+  rightElements.forEach((element) => {
+    observer.observe(element)
+  })
+})
