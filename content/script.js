@@ -88,7 +88,7 @@ class Carousel3D {
     this.currentIndex = 0;
     this.totalCards = this.cards.length;
     this.isAnimating = false;
-    this.positions = ['center', 'right-1', 'right-2', 'right-3', 'hidden', 'left-1', 'left-2', 'left-3'];
+    this.positions = ['center', 'right-1', 'right-2', 'right-3', 'hidden', 'left-3', 'left-2', 'left-1'];
     this.init();
   }
 
