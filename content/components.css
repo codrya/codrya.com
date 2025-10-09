@@ -287,7 +287,7 @@ a {
 }
 
 .black-page {
-  background-color: pink;
+  background-color: var(--smoky-black);
   padding: auto;
   display: flex;
   box-sizing: border-box;
