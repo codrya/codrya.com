@@ -115,6 +115,8 @@
 
 /* GÖNDER BUTONU (ORTALANDI) */
 .submit-container {
+    display: flex;
+    justify-content: center;
     grid-column: 1 / -1; /* Her zaman tam genişlik */
     text-align: center;
     margin-top: 20px;
