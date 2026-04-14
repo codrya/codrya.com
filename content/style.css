@@ -704,6 +704,7 @@
   overflow: hidden;
   flex-direction: row;
   display: flex;
+  align-items: center;
 }
 .blob-container .container {
   padding-top: 3%;
