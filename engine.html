@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Stroke Engine Animation</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2a2a2a;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        canvas {
+            background-color: #222;
+            border-radius: 8px;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        #strokeLabel {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .indicators {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .indicator {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+        
+        .active {
+            opacity: 1;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        #ind-intake { background-color: #4da6ff; color: #000; }
+        #ind-compression { background-color: #336699; color: #fff; }
+        #ind-power { background-color: #ff9900; color: #000; }
+        #ind-exhaust { background-color: #999999; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <canvas id="engineCanvas" width="400" height="550"></canvas>
+        <div class="dashboard">
+            <div id="strokeLabel">Intake</div>
+            <div class="indicators">
+                <div class="indicator" id="ind-intake">INTAKE</div>
+                <div class="indicator" id="ind-compression">COMPRESSION</div>
+                <div class="indicator" id="ind-power">POWER</div>
+                <div class="indicator" id="ind-exhaust">EXHAUST</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('engineCanvas');
+        const ctx = canvas.getContext('2d');
+        const label = document.getElementById('strokeLabel');
+        const indicators = {
+            intake: document.getElementById('ind-intake'),
+            compression: document.getElementById('ind-compression'),
+            power: document.getElementById('ind-power'),
+            exhaust: document.getElementById('ind-exhaust')
+        };
+
+        // Engine Geometry
+        const cx = 200;            // Crankshaft X center
+        const cy = 420;            // Crankshaft Y center
+        const r = 60;              // Crank radius
+        const l = 160;             // Connecting rod length
+        const cylWidth = 84;       // Cylinder internal width
+        const pistonHeight = 60;   // Piston height
+        const headY = 120;         // Cylinder head Y coordinate
+
+        // Animation State
+        let angle = 0;             // Crank angle in radians
+        const speed = 0.06;        // Radians per frame
+
+        function drawEngine() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Kinematic Math
+            // 0 radians is Top Dead Center (TDC)
+            const crankX = cx + r * Math.sin(angle);
+            const crankY = cy - r * Math.cos(angle);
+            
+            // Calculate piston Y using the slider-crank equation
+            const pistonPinY = crankY - Math.sqrt(l * l - Math.pow(crankX - cx, 2));
+            const pistonTopY = pistonPinY - (pistonHeight / 2);
+            
+            // Cycle Logic (4 strokes = 720 degrees = 4 PI radians)
+            const cycleAngle = angle % (Math.PI * 4);
+            let state, gasColor, valveInOpen, valveExOpen;
+
+            // Normalize progress inside current stroke (0 to 1)
+            const strokeProgress = (cycleAngle % Math.PI) / Math.PI;
+
+            if (cycleAngle < Math.PI) {
+                // 1. INTAKE
+                state = "intake";
+                gasColor = `rgba(77, 166, 255, ${0.4 + strokeProgress * 0.4})`;
+                valveInOpen = true;
+                valveExOpen = false;
+                updateUI("Intake", "#4da6ff", state);
+            } else if (cycleAngle < Math.PI * 2) {
+                // 2. COMPRESSION
+                state = "compression";
+                gasColor = `rgba(${77 - strokeProgress*40}, ${166 - strokeProgress*60}, ${255 - strokeProgress*50}, ${0.8 + strokeProgress*0.2})`;
+                valveInOpen = false;
+                valveExOpen = false;
+                updateUI("Compression", "#6699cc", state);
+            } else if (cycleAngle < Math.PI * 3) {
+                // 3. POWER
+                state = "power";
+                if (strokeProgress < 0.1) {
+                    gasColor = "rgba(255, 255, 150, 1)"; // Spark flash
+                } else {
+                    gasColor = `rgba(255, ${150 - strokeProgress * 100}, 0, ${1 - strokeProgress * 0.4})`; // Fire expanding
+                }
+                valveInOpen = false;
+                valveExOpen = false;
+                updateUI("Power", "#ff9900", state);
+            } else {
+                // 4. EXHAUST
+                state = "exhaust";
+                gasColor = `rgba(150, 150, 150, ${0.8 - strokeProgress * 0.4})`;
+                valveInOpen = false;
+                valveExOpen = true;
+                updateUI("Exhaust", "#999999", state);
+            }
+
+            // --- DRAWING ---
+
+            // 1. Gas Volume
+            ctx.fillStyle = gasColor;
+            ctx.fillRect(cx - cylWidth/2, headY, cylWidth, pistonTopY - headY);
+
+            // 2. Valves & Ports
+            drawValve(cx - 20, headY, valveInOpen, "#4da6ff", cycleAngle < Math.PI); // Intake Port/Valve
+            drawValve(cx + 20, headY, valveExOpen, "#999999", cycleAngle >= Math.PI * 3); // Exhaust Port/Valve
+
+            // 3. Spark Plug & Spark
+            ctx.fillStyle = "#eee";
+            ctx.fillRect(cx - 4, headY - 15, 8, 15); // Plug body
+            ctx.fillStyle = "#444";
+            ctx.fillRect(cx - 2, headY, 4, 5); // Electrode
+            if (state === "power" && strokeProgress < 0.08) {
+                drawSpark(cx, headY + 5);
+            }
+
+            // 4. Cylinder Engine Block
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = "#555";
+            ctx.lineCap = "butt";
+            ctx.beginPath();
+            // Left wall
+            ctx.moveTo(cx - cylWidth/2 - 6, headY - 10);
+            ctx.lineTo(cx - cylWidth/2 - 6, cy - r - 20);
+            // Right wall
+            ctx.moveTo(cx + cylWidth/2 + 6, headY - 10);
+            ctx.lineTo(cx + cylWidth/2 + 6, cy - r - 20);
+            ctx.stroke();
+            
+            // Cylinder Head Outline
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.moveTo(cx - cylWidth/2 - 12, headY - 4);
+            ctx.lineTo(cx - 30, headY - 4); // gap for intake
+            ctx.moveTo(cx - 10, headY - 4);
+            ctx.lineTo(cx + 10, headY - 4); // center gap for exhaust
+            ctx.moveTo(cx + 30, headY - 4);
+            ctx.lineTo(cx + cylWidth/2 + 12, headY - 4);
+            ctx.stroke();
+
+            // 5. Connecting Rod
+            ctx.lineWidth = 16;
+            ctx.strokeStyle = "#888";
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(cx, pistonPinY);
+            ctx.lineTo(crankX, crankY);
+            ctx.stroke();
+            // Rod highlight
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = "#aaa";
+            ctx.beginPath();
+            ctx.moveTo(cx, pistonPinY);
+            ctx.lineTo(crankX, crankY);
+            ctx.stroke();
+
+            // 6. Piston
+            ctx.fillStyle = "#ccc";
+            ctx.fillRect(cx - cylWidth/2 + 2, pistonTopY, cylWidth - 4, pistonHeight);
+            // Piston rings
+            ctx.fillStyle = "#222";
+            ctx.fillRect(cx - cylWidth/2 + 1, pistonTopY + 10, cylWidth - 2, 4);
+            ctx.fillRect(cx - cylWidth/2 + 1, pistonTopY + 20, cylWidth - 2, 4);
+            // Piston pin
+            ctx.fillStyle = "#333";
+            ctx.beginPath();
+            ctx.arc(cx, pistonPinY, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#888";
+            ctx.beginPath();
+            ctx.arc(cx, pistonPinY, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 7. Crankshaft & Counterweight
+            // Counterweight
+            ctx.fillStyle = "#444";
+            ctx.beginPath();
+            ctx.arc(cx, cy, r + 20, angle + Math.PI/2, angle + Math.PI*1.5);
+            ctx.fill();
+            // Crank web
+            ctx.lineWidth = 24;
+            ctx.strokeStyle = "#555";
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(crankX, crankY);
+            ctx.stroke();
+            // Crank center
+            ctx.fillStyle = "#222";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 15, 0, Math.PI * 2);
+            ctx.fill();
+            // Crank pin
+            ctx.fillStyle = "#bbb";
+            ctx.beginPath();
+            ctx.arc(crankX, crankY, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#333";
+            ctx.beginPath();
+            ctx.arc(crankX, crankY, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Advance animation
+            angle += speed;
+            requestAnimationFrame(drawEngine);
+        }
+
+        function drawValve(x, y, isOpen, portColor, showFlow) {
+            const valveDrop = isOpen ? 12 : 0;
+            
+            // Port background (shows flow color if active)
+            if (showFlow) {
+                ctx.fillStyle = portColor;
+                ctx.fillRect(x - 10, y - 30, 20, 30);
+            }
+
+            // Valve stem
+            ctx.fillStyle = "#ccc";
+            ctx.fillRect(x - 2, y - 35 + valveDrop, 4, 35);
+            
+            // Valve head
+            ctx.beginPath();
+            ctx.moveTo(x - 12, y + valveDrop);
+            ctx.lineTo(x + 12, y + valveDrop);
+            ctx.lineTo(x + 6, y - 4 + valveDrop);
+            ctx.lineTo(x - 6, y - 4 + valveDrop);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawSpark(x, y) {
+            ctx.strokeStyle = "#e6ffff";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - 8, y + 8);
+            ctx.lineTo(x + 6, y + 14);
+            ctx.lineTo(x - 4, y + 22);
+            ctx.lineTo(x, y + 30);
+            ctx.stroke();
+            
+            // Glow
+            ctx.fillStyle = "rgba(255, 255, 200, 0.6)";
+            ctx.beginPath();
+            ctx.arc(x, y + 15, 25, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function updateUI(text, color, state) {
+            label.innerText = text;
+            label.style.color = color;
+            
+            for (let key in indicators) {
+                if (key === state) {
+                    indicators[key].classList.add('active');
+                } else {
+                    indicators[key].classList.remove('active');
+                }
+            }
+        }
+
+        // Start animation loop
+        drawEngine();
+    </script>
+</body>
+</html>
